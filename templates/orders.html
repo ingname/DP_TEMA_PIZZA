@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Заказы - Пицца фром соня</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='line.css') }}">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+        }
+        .header {
+            background-color: #333;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 1002;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 1.5em;
+        }
+        .header h1 a {
+            color: white;
+            text-decoration: none;
+        }
+        .header button {
+            padding: 5px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #28a745;
+            color: white;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-left: 10px;
+        }
+        .header button:hover {
+            background-color: #218838;
+        }
+        .user-container {
+            display: flex;
+            align-items: center;
+        }
+        .user-info {
+            color: white;
+            margin-right: 10px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .order-card {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .order-card h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.5em;
+        }
+        .order-details, .pizza-details {
+            margin-bottom: 15px;
+        }
+        .order-details p, .pizza-details p {
+            margin: 5px 0;
+        }
+        .edit-button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .edit-button:hover {
+            background-color: #0056b3;
+        }
+        .save-button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #28a745;
+            color: white;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .save-button:hover {
+            background-color: #218838;
+        }
+        .form-input {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1><a href="/">Пицца фром соня</a></h1>
+        <div class="user-container">
+            <div class="user-info" id="user-info"></div>
+            <button id="auth-button" onclick="window.location.href='/auth'">Авторизация</button>
+            <button id="logout-button" style="display:none;" onclick="logout()">Выйти</button>
+        </div>
+    </div>
+    <div class="container" id="orders-container">
+        <h2>Все заказы</h2>
+    </div>
+    <script type="module" src="{{ url_for('static', filename='orders.js') }}"></script>
+    <script>
+        async function logout() {
+            const response = await fetch('/logout', { method: 'POST' });
+            if (response.ok) {
+                window.location.href = '/';
+            }
+        }
+    </script>
+</body>
+</html>

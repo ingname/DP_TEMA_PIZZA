@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Courier Tracking</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        #map {
+            height: 100vh;
+        }
+        #back-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        #back-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <button id="back-button">Назад</button>
+    <div id="map"></div>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        document.getElementById('back-button').addEventListener('click', function() {
+            window.location.href = '/';
+        });
+
+        const map = L.map('map').setView([58.599710, 49.667905], 15);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        let courierMarker;
+
+        // Функция для обновления местоположения курьера на карте
+        function updateCourierLocation(latitude, longitude, courier_id) {
+            if (courierMarker) {
+                courierMarker.setLatLng([latitude, longitude]);
+            } else {
+                courierMarker = L.marker([latitude, longitude]).addTo(map).bindPopup('Courier is here');
+            }
+
+            // Обновляем центр карты, если нужно
+            map.setView([latitude, longitude], map.getZoom());
+        }
+
+        // Функция для выполнения GET запроса на сервер и отображения данных на карте
+        function getLocationFromServer() {
+            $.getJSON('http://192.168.80.28:5000/api/get_location', function(data) {
+                console.log("Received location data:", data); // Добавьте эту строку для отладки
+                const lat = data.latitude;
+                const lon = data.longitude;
+                const courierId = data.courier_id;
+
+                updateCourierLocation(lat, lon, courierId);
+            });
+        }
+
+        // Исполняем функцию отправки и получения данных каждые 10 секунд
+        setInterval(function() {
+            getLocationFromServer();
+        }, 10000); // Обновление каждые 10 секунд
+
+        // Инициализация первоначального отображения местоположения
+        getLocationFromServer();
+    </script>
+</body>
+</html>

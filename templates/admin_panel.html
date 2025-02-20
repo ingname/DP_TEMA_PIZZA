@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Админ панель - Пицца фром соня</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='line.css') }}">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+        }
+        .header {
+            background-color: #333;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 1002;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 1.5em;
+        }
+        .header h1 a {
+            color: white;
+            text-decoration: none;
+        }
+        .header button {
+            padding: 5px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #28a745;
+            color: white;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-left: 10px;
+        }
+        .header button:hover {
+            background-color: #218838;
+        }
+        .user-container {
+            display: flex;
+            align-items: center;
+        }
+        .user-info {
+            color: white;
+            margin-right: 10px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .admin-panel {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .admin-panel h2 {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+        .admin-panel button {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin: 10px;
+        }
+        .admin-panel button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1><a href="/">Пицца фром соня</a></h1>
+        <div class="user-container">
+            <div class="user-info" id="user-info"></div>
+            <button id="auth-button" onclick="window.location.href='/auth'">Авторизация</button>
+            <button id="logout-button" style="display:none;" onclick="logout()">Выйти</button>
+        </div>
+    </div>
+    <div class="container">
+        <div class="admin-panel">
+            <h2>Админ панель</h2>
+            <button id="add-pizza-button" onclick="window.location.href='/admin/add_pizza'">Добавить новую пиццу</button>
+            <button id="view-orders-button" onclick="window.location.href='/admin/view_orders'">Просмотр всех заказов</button>
+            <button id="add-user-button" onclick="window.location.href='/admin/add_user'">Добавить нового пользователя</button>
+        </div>
+    </div>
+    <script type="module" src="{{ url_for('static', filename='admin_panel.js') }}"></script>
+    <script>
+        async function logout() {
+            const response = await fetch('/logout', { method: 'POST' });
+            if (response.ok) {
+                window.location.href = '/';
+            }
+        }
+    </script>
+</body>
+</html>

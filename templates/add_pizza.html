@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавление пиццы - Пицца фром соня</title>
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='line.css') }}">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+        }
+        .header {
+            background-color: #333;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 1002;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 1.5em;
+        }
+        .header h1 a {
+            color: white;
+            text-decoration: none;
+        }
+        .header button {
+            padding: 5px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #28a745;
+            color: white;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-left: 10px;
+        }
+        .header button:hover {
+            background-color: #218838;
+        }
+        .user-container {
+            display: flex;
+            align-items: center;
+        }
+        .user-info {
+            color: white;
+            margin-right: 10px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+            margin-top: 20px;
+        }
+        .form-container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .form-container label {
+            font-size: 1.2em;
+            color: #333;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .form-container input[type="text"],
+        .form-container input[type="number"],
+        .form-container input[type="file"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+        .form-container textarea {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+        .form-container .button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .form-container .button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Пицца фром соня</h1>
+        <div class="user-container">
+            <div class="user-info" id="user-info"></div>
+            <button id="auth-button" onclick="window.location.href='/auth'">Авторизация</button>
+            <button id="logout-button" style="display:none;" onclick="logout()">Выйти</button>
+        </div>
+    </div>
+    <div class="container">
+        <h1>Добавление новой пиццы</h1>
+        <div class="form-container">
+            <form id="pizza-form">
+                <label for="name">Название пиццы:</label>
+                <input type="text" id="name" name="name" required>
+                
+                <label for="description">Описание:</label>
+                <textarea id="description" name="description" rows="4" required></textarea>
+                
+                <label for="price">Цена (руб.):</label>
+                <input type="number" id="price" name="price" min="0" required>
+                
+                <label for="image">Изображение:</label>
+                <input type="file" id="image" name="image" accept="image/*" required>
+                
+                <button type="submit" class="button" id="add-pizza">Добавить пиццу</button>
+            </form>
+        </div>
+    </div>
+    <script type="module" src="{{ url_for('static', filename='add_pizza.js') }}"></script>
+    <script>
+        async function logout() {
+            const response = await fetch('/logout', { method: 'POST' });
+            if (response.ok) {
+                window.location.href = '/';
+            }
+        }
+    </script>
+</body>
+</html>

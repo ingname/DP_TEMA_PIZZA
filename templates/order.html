@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Оформление заказа</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f8f8f8;
+    }
+    .header {
+        background-color: #333;
+        color: white;
+        padding: 10px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+        z-index: 1002;
+    }
+    .header h1 {
+        margin: 0;
+        font-size: 1.5em;
+    }
+    .header h1 a {
+        color: white;
+        text-decoration: none;
+    }
+    .header button {
+        padding: 5px 15px;
+        border: none;
+        border-radius: 5px;
+        background-color: #28a745;
+        color: white;
+        font-size: 0.9em;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        margin-left: 10px;
+    }
+    .header button:hover {
+        background-color: #218838;
+    }
+    .user-container {
+        display: flex;
+        align-items: center;
+    }
+    .user-info {
+        color: white;
+        margin-right: 10px;
+    }
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+</style>
+</head>
+<body>
+    <div class="header">
+        <h1><a href="/">Пицца фром соня</a></h1>
+        <div class="user-container">
+            <div class="user-info" id="user-info"></div>
+            <button id="auth-button" onclick="window.location.href='/auth'">Авторизация</button>
+            <button id="logout-button" style="display:none;" onclick="logout()">Выйти</button>
+        </div>
+    </div>
+    <div class="container">
+        <div class="form-container">
+            <h2>Оформление заказа</h2>
+            <form id="order-form">
+                <input id="surname" placeholder="Фамилия" required>
+                <input id="name" placeholder="Имя" required>
+                <input id="street" placeholder="Улица" required>
+                <input id="house" placeholder="Дом" required>
+                <input id="flat" placeholder="Квартира">
+                <input id="city" placeholder="Город" required>
+                <input id="phone_number" placeholder="Номер телефона" required>
+                <button id="postOrder">Отправить заказ</button>
+            </form>
+        </div>
+        <div class="form-container-2">
+            <h2>Ваш заказ</h2>
+            <form id="check-form">
+                <p>Итого: <span id="total2"></span> р.</p>
+                <button id="placeChOrButton">Изменить заказ</button>
+            </form>
+        </div>
+    </div>
+    <script type="module" src="{{ url_for('static', filename='order.js') }}"></script>
+    <script>
+        async function logout() {
+            const response = await fetch('/logout', { method: 'POST' });
+            if (response.ok) {
+                window.location.href = '/';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchUserInfo();
+        });
+
+        async function fetchUserInfo() {
+            const response = await fetch('/current_user');
+            if (response.ok) {
+                const data = await response.json();
+                updateHeader(data);
+            }
+        }
+
+        function updateHeader(userInfo) {
+            const authButton = document.getElementById('auth-button');
+            const logoutButton = document.getElementById('logout-button');
+            authButton.style.display = 'none';
+            logoutButton.style.display = 'block';
+
+            const userInfoDiv = document.createElement('div');
+            userInfoDiv.className = 'user-info';
+
+            const userNameSpan = document.createElement('span');
+            userNameSpan.textContent = userInfo.login;
+            userInfoDiv.appendChild(userNameSpan);
+
+            const userContainer = document.querySelector('.user-container');
+            if (userInfo.role == 1) {
+                const adminButton = document.createElement('button');
+                adminButton.textContent = 'Панель администратора';
+                adminButton.onclick = () => window.location.href = '/admin/dashboard';
+                userContainer.insertBefore(adminButton, userContainer.firstChild);
+            }
+
+            userContainer.insertBefore(userInfoDiv, authButton);
+        }
+    </script>
+</body>
+</html>

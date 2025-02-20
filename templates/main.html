@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Пицца фром соня</title>
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='line.css') }}">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+        }
+        .header {
+            background-color: #333;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 1002;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 1.5em;
+        }
+        .header button {
+            padding: 5px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #28a745;
+            color: white;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-left: 10px;
+        }
+        .header button:hover {
+            background-color: #218838;
+        }
+        .user-container {
+            display: flex;
+            align-items: center;
+        }
+        .user-info {
+            color: white;
+            margin-right: 10px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+            margin-top: 20px;
+        }
+        .products {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+        .product {
+            width: 250px;
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        .product:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+        .product img {
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        .product h2 {
+            font-size: 1.5em;
+            margin: 10px 0;
+            color: #333;
+        }
+        .product p {
+            font-size: 1em;
+            color: #666;
+            margin-bottom: 15px;
+        }
+        .button {
+            padding: 10px 20px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #28a745;
+            color: white;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #218838;
+        }
+        .cart {
+            position: fixed;
+            top: 60px;
+            right: -350px;
+            height: calc(100% - 60px);
+            background-color: #fff;
+            padding: 20px;
+            border-left: 1px solid #ddd;
+            box-shadow: -4px 0 8px rgba(0,0,0,0.1);
+            width: 300px;
+            transition: right 0.3s;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        .cart.open {
+            right: 0;
+        }
+        .cart h2 {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        #cart-items {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        #cart-items li {
+            font-size: 1em;
+            color: #666;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+        #total {
+            font-weight: bold;
+            color: #333;
+        }
+        #placeOrderButton {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+            margin-top: 20px;
+        }
+        #placeOrderButton:hover {
+            background-color: #0056b3;
+        }
+        .cart-toggle {
+            position: fixed;
+            top: 70px;
+            right: 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            z-index: 1001;
+        }
+        .cart-toggle:hover {
+            background-color: #0056b3;
+        }
+        .cart-count {
+            background-color: #dc3545;
+            color: white;
+            border-radius: 50%;
+            padding: 5px 10px;
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            font-size: 1em;
+            display: inline-block;
+            text-align: center;
+        }
+        .cart-count.animate {
+            animation: bounce 0.3s;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-15px); }
+            60% { transform: translateY(-10px); }
+        }
+        .remove-button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #dc3545;
+            color: white;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .remove-button:hover {
+            background-color: #c82333;
+        }
+        .add-button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #28a745;
+            color: white;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .add-button:hover {
+            background-color: #218838;
+        }
+        .header h1 a {
+            color: inherit;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Пицца фром соня</h1>
+
+           <div class="user-container">
+            <div class="user-info" id="user-info">
+            </div>
+                <button id="auth-button" onclick="window.location.href='/auth'">Авторизация</button>
+                <button id="logout-button" style="display:none;" onclick="logout()">Выйти</button>
+            </div>
+        </div>    
+    </div>
+    <div class="container">
+        <h1>Пицца</h1>
+        <div class="products"></div>
+    </div>
+    <div class="cart">
+        <h2>Корзина</h2>
+        <ul id="cart-items"></ul>
+        <p>Итого: <span id="total">0</span> р.</p>
+        <button id="placeOrderButton">Оформить заказ</button>
+    </div>
+    <button class="cart-toggle" onclick="toggleCart()">Корзина</button>
+    <script type="module" src="{{ url_for('static', filename='main.js') }}"></script>
+    <script>
+        function toggleCart() {
+            document.querySelector('.cart').classList.toggle('open');
+        }
+
+        async function logout() {
+            const response = await fetch('/logout', { method: 'POST' });
+            if (response.ok) {
+                window.location.href = '/';
+            }
+        }
+
+    </script>
+</body>
+</html>

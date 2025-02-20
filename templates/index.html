@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">    
+    <link rel="stylesheet" href="{{ url_for('static', filename='line.css') }}">
+    
+    <link rel="stylesheet" href="https://unicons.iconscout.com/release/v4.0.0/css/line.css">
+    <title>Авторизация и регистрация</title>
+</head>
+<body>
+    <div class="container">
+        <div class="forms">
+            <div class="form login active">
+                <span class="title">Авторизация</span>
+                <form action="#">
+                    <div class="checkbox-text">
+                        <span class="text" id="incorrIpt"></span>
+                    </div>
+                    <div class="input-field">
+                        <i class="uil uil-user"></i>
+                        <input type="text" id="loginInp" placeholder="Введите свой логин" required>
+                    </div>
+                    <div class="input-field password-container">
+                        <i class="uil uil-lock"></i>
+                        <input type="password" id="passwInp" class="password" placeholder="Введите свой пароль" required>
+                        <div class="icon-container">
+                            <i class="uil uil-eye-slash showHidePw"></i>
+                        </div>
+                    </div>
+                    <div class="input-field button">
+                        <input type="button" id="button-sign-up" value="Войти">
+                    </div>
+                </form>
+                <div class="login-signup">
+                    <span class="text">Не зарегистрированы?
+                        <a href="#" class="text signup-link">Зарегистрируйтесь!</a>
+                    </span>
+                </div>
+            </div>
+
+            <div class="form signup">
+                <span class="title">Регистрация</span>
+                <form action="#">
+                    <div class="checkbox-text">
+                        <span class="text" id="incorrIpt2"></span>
+                    </div>
+                    <div class="input-field">
+                        <i class="uil uil-user"></i>
+                        <input type="text" id="reg_login" placeholder="Введите ваш логин" required>
+                    </div>
+                    <div class="input-field password-container">
+                        <i class="uil uil-lock"></i>
+                        <input type="password" id="reg_password" class="password" placeholder="Введите пароль" required>
+                        <div class="icon-container">
+                            <i class="uil uil-eye-slash showHidePw"></i>
+                        </div>
+                    </div>
+                    <div class="input-field password-container">
+                        <i class="uil uil-lock"></i>
+                        <input type="password" id="reg_password_acp" class="password" placeholder="Повторите пароль" required>
+                        <div class="icon-container">
+                            <i class="uil uil-eye-slash showHidePw"></i>
+                        </div>
+                    </div>
+                    <div class="input-field button">
+                        <input type="button" id="button-reg" value="Зарегистрироваться">
+                    </div>
+                </form>
+                <div class="login-signup">
+                    <span class="text">Уже зарегистрированы?
+                        <a href="#" class="text login-link">Войдите!</a>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='auth.js') }}"></script>
+</body>
+</html>
